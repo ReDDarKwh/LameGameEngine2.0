@@ -1,3 +1,0 @@
-# life-game
-game
-durp
