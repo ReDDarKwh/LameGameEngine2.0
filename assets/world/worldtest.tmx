@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" width="100" height="50" tilewidth="16" tileheight="16">
+ <tileset firstgid="1" name="tiles" tilewidth="16" tileheight="16">
+  <image source="spr_world_tiles.png" width="256" height="256"/>
+ </tileset>
+ <layer name="blocking" width="100" height="50">
+  <data encoding="base64" compression="zlib">
+   eJzt1jEKwCAMBVBXe4fe/5pdHOQjpVO08B5kyST5YNIaAAAAAAAAAABfXKM4Qx8ll33m2fcomdSbZ5959I3vghPcUdmj3up/skP2ecvDvVUv81jtdmrNc3dnnSHzyD4AAAAAAADA3z3BIQK+
+  </data>
+ </layer>
+ <layer name="notBlocking" width="100" height="50">
+  <data encoding="base64" compression="zlib">
+   eJzt1lEKgkAQBmChTiBUz+UJrBt1/0PUhhvLoNSLY9D3waCr+7D4M7t2HQAAAAAAAADwq65Tsb2huR87uWyl9sQw825MXsu/azO4L8w5ZyyEl7meiOSRp+Sx/1DyyDPXH7swdobkOoZx/6xTeOZ/K0/skfLtbwtz7V3ri3nE/ao6rL0Q3to9aykPvZGrZtLmUXqiniXyyFcy6adrqctU8cwHAAAAAAAAvvcAGNEGGw==
+  </data>
+ </layer>
+ <layer name="trees" width="100" height="50">
+  <data encoding="base64" compression="zlib">
+   eJzt2UEKwCAMBEC/l/9/qNBTKUVqqcTgDASv4pLkYGsAAAAAAPCPyL4Ap7gUeeKhgDFxO8klj7XIYz5vC1TzZm6ZbexKf9TQy0A+AHuzBwD4wj/tWkZzkNtc+gMAAAAAajgA8iAI2A==
+  </data>
+ </layer>
+</map>
