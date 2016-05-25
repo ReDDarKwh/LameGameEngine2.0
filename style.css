@@ -1,0 +1,39 @@
+
+@font-face {
+   font-family: myFirstFont;
+   src: url(ARCADECLASSIC.TTF);
+}
+
+body {
+   font-family: myFirstFont;
+}
+
+
+#canvas{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top:8px ;
+    display: block;
+    border: 2px solid black;
+    box-shadow: 5px 5px 5px #888888;
+}
+
+#debugDiv{
+    position:fixed;
+    margin-top:8px ;
+    display: block;
+    right:50px;
+}
+
+
+
+.debug{
+  
+  -webkit-user-select: none;
+  text-align: end;
+  font-size: 25px;
+  margin: 2px;
+  color: white;
+  text-shadow: -1px 0 black, 0 1px black, 1px 0 black, 0 -1px black;
+
+}
