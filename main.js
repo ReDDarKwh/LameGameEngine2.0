@@ -13,7 +13,7 @@ window.onload= function(){
   objects.addType("projectile",true);
   objects.addType("player",false);
   objects.addType("enemy",true);
-  
+  objects.addType("dumbSlime",true);
   
   let slimeAnims = [{name:"up",dir:"spr_slime_up.png",anim:[0,1,2,3]},
                     {name:"left",dir:"spr_slime_rl.png",anim:[3,2,1,0]},
@@ -26,14 +26,15 @@ window.onload= function(){
   
   objects.addSpriteToType("enemy",slimeAnims);
 
-  
   objects.addSpriteToType("projectile",[{name:"bullet",dir:"spr_slime_projectile.png",anim:[0,1,2]}]);
-   
+  
+  objects.addSpriteToType("dumbSlime",[{name:"left",dir:"spr_slime_rl.png",anim:[3,2,1,0]},
+                                       {name:"right",dir:"spr_slime_rl.png",anim:[4,5,6,7]}]);
    
    
   objects.addInstance(0,0,new Sprite("idle",32,32,0.07,16,16),"player",40,{canShoot:1,shootSpd:0.2});
  
-  objects.addInstance(0,0,new Sprite("left",32,32,0.15,16,16),"enemy",50,{dir:-1});
+  //objects.addInstance(0,0,new Sprite("idle",32,32,0.15,16,16),"enemy",50,{dir:-1});
 
 /*
   for(let i = 0; i<2000;i++){
@@ -50,7 +51,7 @@ window.onload= function(){
       
         if(objects.update[i]){//run custom update of the type if there is one.
           
-          objects.update[i](c,dt/1000);
+          objects.update[i](c,dt);
         }
         
         if(objects.list[i][2]){//update coords to be relative to the world if relativeToWorld is true;
@@ -65,24 +66,29 @@ window.onload= function(){
   }
   
   
-  function render(dt){
+  function render(){
     
     ctx.clearRect(-can.width/2,-can.height/2,can.width,can.height);
   
     world.draw();
      
+     
+    var objectPool = [];
+     
     for (let i in objects.list) {
       
-      objects.list[i][0].forEach(function(c){
-      
-        c.ima.draw(c.x,c.y);
-      });
+        objectPool = objectPool.concat(objects.list[i][0]);
     }
- 
- 
-    //drawPath(objects.list.enemy[0][0].extra.path.path||[]);
- 
- 
+    
+    objectPool.sort(function(a,b){
+      return a.y-b.y;
+    }).forEach(function(c){
+      
+      c.ima.draw(c.x,c.y);
+      
+    });
+    
+    
   }
   
   
@@ -95,8 +101,8 @@ window.onload= function(){
     then = now;
       
 
-    update(dt);
-    render(dt);
+    update(dt/1000);
+    render();
     
     stats.end();
     run(tick);
