@@ -1,0 +1,23 @@
+TODO:
+
+1. Make the enemy change color on hit.
+
+2. Find a way to know how much life the enemy has left by looking at him.
+
+3. Find a way to fix the collision bug when a enemy changes his mode of motion
+   from "smartChase" to "dumbChase". (maybe)
+
+4. Make the enemy attack in some way.
+
+5. Make the player killable.
+
+6. Make some kind of game over screen.
+
+7. Code something that will prevent the camera from seeing further than the
+   world somehow...
+
+8. Stop player from going off the world.
+
+9. Make the game playable on mobile.
+
+10. Draw some new animations.   
