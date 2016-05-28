@@ -13,11 +13,19 @@ TODO:
 
 6. Make some kind of game over screen.
 
-7. Code something that will prevent the camera from seeing further than the
-   world somehow...
+7. Fix the camera to behave correctly when zooming-in and out.
 
 8. Stop player from going off the world.
 
 9. Make the game playable on mobile.
 
-10. Draw some new animations.   
+10. Draw some new animations.
+
+
+
+
+DONE:
+
+Code something that will prevent the camera from seeing further than the
+   world somehow...
+
