@@ -1,0 +1,12 @@
+{
+  "extends": "google",
+  "env": {
+    "serviceworker": true,
+    "worker": true
+  },
+  "rules": {
+    "max-nested-callbacks": 0,
+    "no-warning-comments": 0,
+    "require-jsdoc": 0
+  }
+}
