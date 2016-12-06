@@ -482,7 +482,8 @@ colum
 
 
     let query = window.location.search.substring(1);
-    if(query!=="")let urlMonsters = query.split(",");
+    let urlMonsters = [];
+    if(query!=="")urlMonsters = query.split(",");
     urlMonsters.forEach(function(c){
       createStatBlock(c);
     })
