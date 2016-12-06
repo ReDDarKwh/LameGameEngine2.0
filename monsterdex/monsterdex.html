@@ -480,15 +480,12 @@ colum
     	}
     }
 
-    
 
-    if(localStorage.getItem("monsters")){
-      localStorage.getItem("monsters").forEach(function(c){
-        createStatBlock(c);
-      })
-      localStorage.removeItem("monsters");
-    }
-
+    let query = window.location.search.substring(1);
+    let urlMonsters = query.split(",");
+    urlMonsters.forEach(function(c){
+      createStatBlock(c);
+    })
 
     let parent = null;
     let renaming = 0;
