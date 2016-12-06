@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+  <title>pointFinder</title>
+   
+</head>
+
+<body>
+  
+  <canvas id="canvas" width="200" height="200" ></canvas>
+  
+  <script>
+    
+      var array = [10,50,20,50,30,50,40,50,50,50,60,50];
+      
+      
+      function repeat(callback,times,steps,start){
+      
+      
+      for(var i = start||0; i<times;i+=steps||1)callback(i);
+      
+    }
+    
+    function rgbColor(a,b,c){
+      
+      
+      return "rgb("+a+","+b+","+c+")";
+      
+    }
+    
+    function getDistance(x1,y1,x2,y2){
+        
+        function pow2(n){
+            
+           return n*n;
+        }
+        
+        return Math.sqrt(pow2(x2-x1)+pow2(y2-y1));
+        
+    }
+    
+    function getAngle(x1,y1,x2,y2){
+      
+      
+      return Math.atan2(y2 - y1, x2 - x1);
+    
+    }
+      
+    
+    
+    function getPoint(x1,y1,x2,y2,l){
+
+        var angle,dis,a,b,c;
+
+        angle=getAngle(x1,y1,x2,y2);
+        dis=getDistance(x1,y1,x2,y2);
+        
+        if(dis>l*2)return false;
+
+        a=l
+        b=a
+        c=dis
+  
+            
+        angle=angle-Math.acos((Math.pow(b,2) + Math.pow(c,2) - Math.pow(a,2))/(2*b*c));
+
+        return [x1+Math.cos(angle)*l,y1+Math.sin(angle)*l]
+
+    }
+
+
+    function moveLines(array,x1,y1,l){
+        
+        
+        var angle,point,dis,p;
+        
+      
+        array[array.length-2]=x1;
+        array[array.length-1]=y1;
+         
+        
+        for(var i=array.length-3; i>2; i-=2){
+          
+            bPoint = [array[i-3],array[i-2]];//point before
+            cPoint = [array[i-1],array[i]]; //current point
+            aPoint = [array[i+1],array[i+2]];// point after
+              
+          
+                angle = getAngle(aPoint[0],aPoint[1],bPoint[0],bPoint[1]);
+                
+                array[i-1]= aPoint[0]+Math.cos(angle)*l;
+                array[i]= aPoint[1]+Math.sin(angle)*l;
+    
+            
+        }
+        
+
+        return array;
+        
+    }
+
+
+       function drawLines(array,ctx){
+        
+        ctx.clearRect(0,0,200,200);
+        
+        repeat(function(i){
+           
+          ctx.lineWidth = 2;
+          ctx.strokeStyle = rgbColor(10,(255/10)*i,10);
+          ctx.beginPath();
+          ctx.moveTo( array[i], array[i+1]);
+          ctx.lineTo( array[i+2],array[i+3]);
+          ctx.stroke();
+           
+           
+         },array.length-1,2);
+          
+          
+          
+        }
+      
+     
+      
+      document.addEventListener("mousemove",function(event){
+        
+     
+     
+     
+       drawLines(moveLines(Array.from(array),event.pageX,event.pageY,10),
+      document.getElementById("canvas").getContext("2d"));
+      
+        
+      });
+      
+      
+      
+     
+      
+      
+      
+  </script>
+</body>
+</html>
