@@ -1,0 +1,30 @@
+
+@font-face {
+   font-family: myFirstFont;
+   src: url(ARCADECLASSIC.TTF);
+}
+
+body {
+   font-family: myFirstFont;
+   background-color: rgb(43, 85, 102);
+   cursor: none;
+}
+
+
+#mainCanvas{
+    margin-left: auto;
+    margin-right: auto;
+    margin-top:8px ;
+    display: block;
+    border: 5px solid black;
+    box-shadow: 1px 3px 10px 9px rgba(0,0,0,0.14);
+    box-shadow: 1px 3px 10px 5px rgba(0,0,0,0.25);
+
+}
+
+
+#cursor{
+  transform: rotate(-25deg);
+  position:absolute;
+
+}

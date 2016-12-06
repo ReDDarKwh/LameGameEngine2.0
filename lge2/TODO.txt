@@ -1,0 +1,31 @@
+
+TODO:
+
+
+
+- Make the enemy attack in some way.
+
+- Make the player killable.
+
+- Make some kind of game over screen.
+
+- Draw sprites for: Knight, villager, slimydude and other cool stuff.
+
+
+
+DONE:
+
+Code something that will prevent the camera from seeing further than the
+ world somehow...
+
+Fix the camera to behave correctly when zooming-in and out.
+
+Stop player from going off the world.
+
+Make the enemy change color on hit.
+
+Make the game playable on mobile.(kinda)
+
+Find a way to know how much life the enemy has left by looking at him.
+
+ transform into any other type.
