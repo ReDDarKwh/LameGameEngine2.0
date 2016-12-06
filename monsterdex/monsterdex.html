@@ -485,7 +485,8 @@ colum
     let urlMonsters = [];
     if(query!=="")urlMonsters = query.split(",");
     urlMonsters.forEach(function(c){
-      createStatBlock(c);
+      let str = c.replace(/%20/g," ");
+      createStatBlock(str);
     })
 
     let parent = null;
