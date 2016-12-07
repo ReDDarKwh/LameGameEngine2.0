@@ -13,16 +13,23 @@
 
 
 
-      body input{
-        display: block;
-        margin: 20px;
-        width: 400px;
-      }
+
 
       @media print{
-        body input{
+        input{
+          display: none;
+          width: 500px
+        }
+
+        p{
           display: none;
         }
+      }
+
+      body input{
+
+        margin: 20px;
+        width: 100px;
       }
 
       stat-block {
@@ -38,15 +45,20 @@
         outline: 2px solid red;
       }
 
+      body>p{
+        margin-left: 20px;
+      }
 
 
     </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="5e-SRD-Monsters.js"></script>
+    <script src="monsters.js"></script>
 
   </head>
 
   <body>
+
+    <p><a href="#">Get monsters</a></p>
     <template id="tapered-rule">
       <style>
         svg {
@@ -57,8 +69,8 @@
           margin-bottom: 0.35em;
         }
       </style>
-      <svg height="5" width="400">
-    <polyline points="0,0 400,2.5 0,5"></polyline>
+      <svg height="5" width="300">
+    <polyline points="0,0 300,2.5 0,5"></polyline>
   </svg>
 </template>
 <script>
@@ -122,16 +134,10 @@
     ::content > h2 {
       font-weight: normal;
       font-style: italic;
-      font-size: 12px;
+      font-size: 10px;
       margin: 0;
     }
-    ::content > input {
-      font-weight: normal;
-      font-style: italic;
-      font-size: 12px;
-      margin: 0;
-      width:400px;
-    }
+
 
   </style>
   <content select="input"></content>
@@ -354,15 +360,15 @@
       margin-right: 2px;
 
       /* This is possibly overriden by next CSS rule. */
-      width:400px;
+      width:300px;
       height: auto;
 
-      -webkit-columns: 400px;
-         -moz-columns: 400px;
-              columns: 400px;
-      -webkit-column-gap: 40px;
-         -moz-column-gap: 40px;
-              column-gap: 40px;
+      -webkit-columns: 300px;
+         -moz-columns: 300px;
+              columns: 300px;
+      -webkit-column-gap: 30px;
+         -moz-column-gap: 30px;
+              column-gap: 30px;
 colum
       /* When height is constrained, we want sequential filling of columns. */
       -webkit-column-fill: auto;
@@ -454,18 +460,39 @@ colum
     document.addEventListener("click",del)
     */
 
+    if(!localStorage.getItem("monsters")){
+      localStorage.setItem("monsters",JSON.stringify(monsters));
+    }else{
+      monsters = JSON.parse(localStorage.getItem("monsters"));
+    }
+
+    function updateStorage(){
+      localStorage.setItem("monsters",JSON.stringify(monsters));
+    }
+
     let monsterInput = document.createElement("input");
     let abilitieNames = ["str","dex","con","int","wis","cha"];
+    let skillsNames = ["acrobatics","arcana","athletics","deception","history",
+    "insight","intimidation","investigation","medicine","nature",
+    "perception","performance","persuasion","religion","stealth","survival"]
     monsterInput.style.width = "400px";
     monsterInput.style.display = "block";
 
     let dataList = document.createElement("datalist");
     dataList.id = "monsters";
-    monsters.forEach(function(c){
-      let option = document.createElement("option");
-      option.value = c.name;
-      dataList.appendChild(option);
-    })
+
+    function dataListUpdate(){
+
+      while (dataList.firstElementChild) {
+        dataList.removeChild(dataList.firstElementChild);
+      }
+      monsters.forEach(function(c){
+        let option = document.createElement("option");
+        option.value = c.name;
+        dataList.appendChild(option);
+      })
+    }dataListUpdate();
+
     document.body.appendChild(dataList);
     let a = document.createAttribute("list");
     a.value = dataList.id;
@@ -493,6 +520,156 @@ colum
     let renaming = 0;
     let mode = "";
     let CurrentTarget = null;
+
+
+
+
+
+    function statBlockToJSON(statBlock){
+      let data = {};
+      let children = statBlock.children;
+      let abilitieFullNames = ["strength","dexterity","constitution","intelligence","wisdom","charisma"]
+
+      let findStrBetween = function (subStr1,subStr2,str){
+
+
+        let findStr = function(subStr){
+          let array = [];
+          let index = 0;
+          let nextIndex = 0;
+          do{
+            index = str.indexOf(subStr,nextIndex);
+            if(index === -1)break;
+            nextIndex = index+subStr.length;
+            array.push(index);
+          }while(true)
+          return array;
+        }
+
+        let opening = findStr(subStr1);
+        let closing = findStr(subStr2);
+        let between = [];
+
+        for(let i = 0; i< opening.length;i++){
+          between.push(str.substring(opening[i]+subStr1.length,closing[i]))
+        }
+
+        return between;
+      }
+
+      let heading = children[0].innerText.split("\n");
+      data.name = heading[0];
+      let wordMatch = heading[1].match(/\w+/g);
+      data.size = wordMatch[0];
+      data.type = wordMatch[1];
+      data.subtype = heading[1].includes("(")?heading[1].match(/\((.*)\)/)[0].replace(/(\(|\))/g,""):"";
+      data.alignment = heading[1].match(/,.*/)[0].match(/\w+/g).join(" ");
+
+
+      let topStatsHTML = children[1].innerHTML;
+      let propertyLineNames = findStrBetween("<h4>","</h4>",topStatsHTML).map(c=>c.trim().toLowerCase().replace(/ /g,"_"));
+      let propertyLineValues = findStrBetween("<p>","</p>",topStatsHTML);
+
+      propertyLineNames.forEach(function(c,i){
+
+        switch(c){
+          case "challenge":
+            data.challenge_rating = propertyLineValues[i].split(" ")[0];
+          break;
+          case "saving_throws":
+            propertyLineValues[i].split(",").map(str=>str.trim().split(" ")).forEach(function(save){
+              let name = abilitieFullNames[abilitieNames.indexOf(save[0].toLowerCase())];
+              let value = parseInt(save[1]);
+
+              data[name+"_save"] = value;
+            })
+          break;
+            case "skills":
+            propertyLineValues[i].split(",").map(str=>str.trim().split(" ")).forEach(function(skill){
+              data[skill[0].toLowerCase()] = parseInt(skill[1]);
+            })
+          break;
+          case "armor_class":
+            data[c] = parseInt(propertyLineValues[i]);
+          break;
+          case "hit_points":
+            data.hit_dice = propertyLineValues[i].match(/\d+d\d+/)[0];
+            data[c] = parseInt(propertyLineValues[i].match(/\d+/)[0]);
+          break
+          default:
+            data[c] = propertyLineValues[i];
+        }
+
+      })
+
+      rawAbilities = children[1].children[3].attributes;
+      for(let i =0;i<rawAbilities.length;i++){
+        data[abilitieFullNames[i]] = parseInt(rawAbilities.item(i).nodeValue);
+      }
+
+
+
+      let properties = [];
+
+      let currentPropertyType = "special_abilities";
+      for(let i = 2; i<children.length;i++){
+        let cChild = children[i];
+        if(cChild.localName === "h3"){
+          currentPropertyType = cChild.innerHTML.toLowerCase().replace(/ /,"_");
+        }
+        if(cChild.localName === "property-block"){
+          let propertyHTML = cChild.innerHTML;
+          let name = findStrBetween("<h4>","</h4>",propertyHTML)[0].trim();
+          let desc = findStrBetween("<p>","</p>",propertyHTML)[0].trim();
+          properties.push({propertyType:currentPropertyType,name:name,desc:desc});
+        }
+      }
+
+      properties.forEach(function(c){
+        if(!data[c.propertyType]){
+          data[c.propertyType] = [];
+        }
+        data[c.propertyType].push({name:c.name,desc:c.desc});
+      })
+
+      let monsterIndex = monsters.findIndex(c=>c.name === data.name);
+      if(monsterIndex === -1){
+        monsters.push(data);
+        dataListUpdate();
+        alert(data.name+" created and saved");
+      }else{
+        monsters[monsterIndex] = data;
+        alert(data.name+" updated");
+      }
+
+      updateStorage();
+
+      var textFile = null;
+      (function(obj){
+
+        let text = "monsters = "+ JSON.stringify(obj);
+        let data = new Blob([text], {type: 'text/plain'});
+
+        // If we are replacing a previously generated file we need to
+        // manually revoke the object URL to avoid memory leaks.
+        if (textFile !== null) {
+          window.URL.revokeObjectURL(textFile);
+        }
+
+        textFile = window.URL.createObjectURL(data);
+
+        // returns a URL you can use as a href
+        let a = document.querySelector("body p a");
+
+        a.href = textFile;
+        a.download = "monsters.js";
+
+      })(monsters);
+
+    }
+
+
+
 
     function createStatBlock(name){
 
@@ -669,13 +846,11 @@ colum
       }
 
       let cSkills = function(){
-        let skills = ["acrobatics","arcana","athletics","deception","history",
-        "insight","intimidation","investigation","medicine","nature",
-        "perception","performance","persuasion","religion","stealth","survival"]
+
 
         let strArray = [];
 
-        skills.forEach(function(c){
+        skillsNames.forEach(function(c){
           if(!isNaN(monster[c])){
             strArray.push(variableToTitle(c)+" +"+monster[c]);
           }
@@ -825,17 +1000,40 @@ colum
         document.removeEventListener("keydown",keyDown);
         document.removeEventListener("keyup",keyUp);
         document.removeEventListener("click",done);
-        clearInterval(interval);
       }
 
       let keyDown = function(event){
-        if(event.code === "ArrowUp" || event.code === "ArrowDown" || event.code === "ArrowLeft" || event.code === "ArrowRight"){
-          pressedKey[event.code]=true;
+        if(event.code === "ArrowLeft"){
+          changeDim(target,"width",-330)
+          event.preventDefault();
+        }
+
+        if(event.code === "ArrowRight"){
+          changeDim(target,"width",330)
           event.preventDefault();
         }
 
         if(event.code === "Enter"){
           done();
+        }
+
+        if(event.code === "KeyS"){
+          statBlockToJSON(target);
+        }
+
+        if(event.code === "KeyD"){
+          let name = target.children[0].children[0].innerHTML;
+
+          let index = monsters.findIndex(c=>c.name===name);
+
+          if(index!=-1){
+            monsters.splice(index,1);
+            dataListUpdate();
+            updateStorage();
+            alert(name+" deleted");
+          }else{
+            alert(name+" is not saved");
+          }
         }
 
       }
@@ -846,12 +1044,6 @@ colum
         pressedKey[event.code]=false;
       }
 
-      let interval = setInterval(function(){
-        if(pressedKey.ArrowLeft){changeDim(target,"width",-440)
-      pressedKey.ArrowLeft = false}
-        if(pressedKey.ArrowRight){changeDim(target,"width",+440)
-      pressedKey.ArrowRight = false}
-      },10);
 
 
       document.addEventListener("keydown",keyDown);
@@ -866,6 +1058,10 @@ colum
 
     function abilityMod(target){
       modProperty(target,"abilities");
+    }
+
+    function variableToTitle(text){
+      return text.replace(/_/," ").replace(/\b[a-z]/g,function(str){return str.toUpperCase()})
     }
 
 
@@ -915,7 +1111,11 @@ colum
             tParent.insertBefore(aBlock, sibling.nextSibling);
 
           }else{
-            target.innerHTML = textBox.value;
+            let value = textBox.value;
+            if(target.localName==="h1"){
+              value = variableToTitle(value);
+            }
+            target.innerHTML = value;
           }
           textBox.remove();
           mode="";

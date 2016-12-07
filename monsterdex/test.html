@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title></title>
+  </head>
+  <body>
+    <script type="text/javascript">
+      let str = "<property-line><h4>Armor Class </h4><p>12</p></property-line><property-line><h4>Hit Points </h4><p>11 (2d8 + 2)</p></property-line><property-line><h4>Speed </h4><p>30 ft.</p></property-line><abilities-block data-str= data-dex= data-con= data-int= data-wis= data-cha=></abilities-block><property-line><h4>Senses </h4><p>passive Perception 10</p></property-line><property-line><h4>Languages </h4><p>any one language (usually Common)</p></property-line><property-line><h4>Challenge </h4><p>1/8 (25 XP)</p></property-line>"
+
+      //return array of strings
+      let findStrBetween = function (subStr1,subStr2,str){
+
+        let findStr = function(subStr){
+          let array = [];
+          let index = 0;
+          let nextIndex = 0;
+          do{
+            index = str.indexOf(subStr,nextIndex);
+            if(index === -1)break;
+            nextIndex = index+subStr.length;
+            array.push(index);
+          }while(true)
+          return array;
+        }
+
+        let opening = findStr(subStr1);
+        let closing = findStr(subStr2);
+        let between = [];
+
+        for(let i = 0; i< opening.length;i++){
+          between.push(str.substring(opening[i]+subStr1.length,closing[i]))
+        }
+
+        return between;
+      }
+
+      console.log(findStrBetween("<h4>","</h4>",str));
+
+
+
+    </script>
+  </body>
+</html>
