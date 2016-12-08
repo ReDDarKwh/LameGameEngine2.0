@@ -685,24 +685,6 @@ colum
         return c.name === name;
       });
 
-      if(!monster){
-        let nbMatchingLetters = [];
-        filteredMonsters.forEach(function(c,currentIndex){
-          let monsterNameArray = c.name.split("");
-          let searchNameArray = name.split("");
-          nbMatchingLetters[currentIndex] = 0;
-          for(let i=0;i<name.length;i++){
-            if(monsterNameArray[i]===searchNameArray[i]){
-              nbMatchingLetters[currentIndex]++;
-            }
-          }
-        })
-        let result = nbMatchingLetters.reduce((a,b)=>{return a>b?a:b});
-        let resultIndex = nbMatchingLetters.findIndex(c=>c === result);
-        if(result>name.length/2){
-          monster = filteredMonsters[resultIndex];
-        }
-      }
 
       if(!monster){
 
