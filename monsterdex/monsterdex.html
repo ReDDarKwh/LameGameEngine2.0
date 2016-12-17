@@ -1,64 +1,42 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:700" rel="stylesheet" type="text/css"/>
-  <link href="http://fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic,700italic" rel="stylesheet" type="text/css"/>
-  <link rel='shortcut icon' type='image/x-icon' href='assets/favicon.ico' />
-  <meta charset="utf-8"/>
-  <title>MONSTERDEX</title>
-    <style>
-      body {
-        margin: 0;
-      }
+  <head>
+    <meta charset="utf-8"/>
+    <title>MONSTERDEX</title>
 
+    <link rel='shortcut icon' type='image/x-icon' href='assets/favicon.png' />
+    <link href="https://fonts.googleapis.com/css?family=Libre+Baskerville:700" rel="stylesheet" type="text/css"/>
+    <link href="http://fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic,700italic" rel="stylesheet" type="text/css"/>
+    <link href="style.css" rel="stylesheet" type="text/css"/>
 
-
-
-
-      @media print{
-        input{
-          display: none;
-          width: 500px
-        }
-
-        p{
-          display: none;
-        }
-      }
-
-      body input{
-
-        margin: 20px;
-        width: 100px;
-      }
-
-      stat-block {
-        /* A bit of margin for presentation purposes, to show off the drop
-        shadow. */
-        margin-left: 20px;
-       /* margin-top: 20px;*/
-
-      }
-
-
-      #selected{
-        outline: 2px solid red;
-      }
-
-      body>p{
-        margin-left: 20px;
-      }
-
-
-    </style>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="monsters.js"></script>
-
+    <script src="logic.js"></script>
   </head>
 
   <body>
+    <div class="menuBar">
+      <img id="logo" src="assets/favicon.png" alt="logo">
+      <input class = "monsterInput" placeholder="Add creature stat-block" type="text" name="" value="">
 
-    <p><a href="#">Get monsters</a></p>
+      <button id= "npcsButton" type="button" class="button">NPCs</button>
+      <button id= "miscellaneousButton" type="button" class="button">miscellaneous</button>
+      <button id= "favoritesButton" type="button" class="button">favorites</button>
+      <button id= "challengeButton" type="button" class="button">challenge</button>
+      <button id= "typeButton" type="button" class="button">type</button>
+
+      <div class="controls">
+        <p>Controls<button class="controlButton" type="button" onclick = "showControlList(this)" name="button"><p>show</p></button>
+        <ul>
+        </ul>
+      </div>
+    </div>
+    <div id="creatureMenu">
+    </div>
+    <div class="content">
+      <p class="downloadStats"><a href="#">Get monsters</a></p>
+    </div>
+
     <template id="tapered-rule">
       <style>
         svg {
@@ -69,1237 +47,380 @@
           margin-bottom: 0.35em;
         }
       </style>
-      <svg height="5" width="300">
-    <polyline points="0,0 300,2.5 0,5"></polyline>
-  </svg>
-</template>
-<script>
-(function(window, document) {
-  var elemName = 'tapered-rule';
-  var thatDoc = document;
-  var thisDoc = (thatDoc.currentScript || thatDoc._currentScript).ownerDocument;
-  var proto = Object.create(HTMLElement.prototype, {
-    createdCallback: {
-      value: function() {
-        var template = thisDoc.getElementById(elemName);
-        var clone = thatDoc.importNode(template.content, true);
-        this.createShadowRoot().appendChild(clone);
-      }
-    }
-  });
-  thatDoc.registerElement(elemName, {prototype: proto});
-})(window, document);
-</script><template id="top-stats">
-  <style>
-    ::content * {
-      color: #7A200D;
-    }
-  </style>
-
-  <tapered-rule></tapered-rule>
-  <content></content>
-  <tapered-rule></tapered-rule>
-</template><script>
-(function(window, document) {
-  var elemName = 'top-stats';
-  var thatDoc = document;
-  var thisDoc = (thatDoc.currentScript || thatDoc._currentScript).ownerDocument;
-  var proto = Object.create(HTMLElement.prototype, {
-    createdCallback: {
-      value: function() {
-        var template = thisDoc.getElementById(elemName);
-        var clone = thatDoc.importNode(template.content, true);
-        this.createShadowRoot().appendChild(clone);
-      }
-    }
-  });
-  thatDoc.registerElement(elemName, {prototype: proto});
-})(window, document);
-</script>
-<template id="creature-heading">
-  <style>
-    ::content > h1 {
-      font-family: 'Libre Baskerville', 'Lora', 'Calisto MT',
-                   'Bookman Old Style', Bookman, 'Goudy Old Style',
-                   Garamond, 'Hoefler Text', 'Bitstream Charter',
-                   Georgia, serif;
-      color: #7A200D;
-      font-weight: 700;
-      margin: 0px;
-      font-size: 23px;
-      letter-spacing: 1px;
-      font-variant: small-caps;
-    }
-
-    ::content > h2 {
-      font-weight: normal;
-      font-style: italic;
-      font-size: 10px;
-      margin: 0;
-    }
-
-
-  </style>
-  <content select="input"></content>
-  <content select="h1"></content>
-  <content select="h2"></content>
-
-</template><script>
-(function(window, document) {
-  var elemName = 'creature-heading';
-  var thatDoc = document;
-  var thisDoc = (thatDoc.currentScript || thatDoc._currentScript).ownerDocument;
-  var proto = Object.create(HTMLElement.prototype, {
-    createdCallback: {
-      value: function() {
-        var template = thisDoc.getElementById(elemName);
-        var clone = thatDoc.importNode(template.content, true);
-        this.createShadowRoot().appendChild(clone);
-      }
-    }
-  });
-  thatDoc.registerElement(elemName, {prototype: proto});
-})(window, document);
-</script><template id="abilities-block">
-  <style>
-    table {
-      width: 100%;
-      border: 0px;
-      border-collapse: collapse;
-    }
-    th, td {
-      width: 50px;
-      text-align: center;
-    }
-  </style>
-  <tapered-rule></tapered-rule>
-  <table>
-    <tbody><tr>
-      <th>STR</th>
-      <th>DEX</th>
-      <th>CON</th>
-      <th>INT</th>
-      <th>WIS</th>
-      <th>CHA</th>
-    </tr>
-    <tr>
-      <td id="str"></td>
-      <td id="dex"></td>
-      <td id="con"></td>
-      <td id="int"></td>
-      <td id="wis"></td>
-      <td id="cha"></td>
-    </tr>
-  </tbody></table>
-  <tapered-rule></tapered-rule>
-</template><script>
-(function(window, document) {
-  function abilityModifier(abilityScore) {
-    var score = parseInt(abilityScore, 10);
-    return Math.floor((score - 10) / 2);
-  }
-
-  function formattedModifier(abilityModifier) {
-    if (abilityModifier >= 0) {
-      return '+' + abilityModifier;
-    }
-    // This is an en dash, NOT a "normal" dash. The minus sign needs to be more
-    // visible.
-    return '–' + Math.abs(abilityModifier);
-  }
-
-  function abilityText(abilityScore) {
-    return [String(abilityScore),
-            ' (',
-            formattedModifier(abilityModifier(abilityScore)),
-            ')'].join('');
-  }
-
-  var elemName = 'abilities-block';
-  var thatDoc = document;
-  var thisDoc = (thatDoc.currentScript || thatDoc._currentScript).ownerDocument;
-  var proto = Object.create(HTMLElement.prototype, {
-    createdCallback: {
-      value: function() {
-        var template = thisDoc.getElementById(elemName);
-        var clone = thatDoc.importNode(template.content, true);
-        var root = this.createShadowRoot().appendChild(clone);
-      }
-    },
-    attachedCallback: {
-      value: function() {
-        var root = this.shadowRoot;
-        for (var i = 0; i < 6; i++) {
-          var attribute = this.attributes[i];
-          var abilityShortName = attribute.name.split('-')[1];
-          root.getElementById(abilityShortName).textContent =
-             abilityText(attribute.value);
+      <svg height="4" width="300">
+        <polyline points="0,0 300,2.5 0,5"></polyline>
+      </svg>
+    </template>
+    <script>
+    (function(window, document) {
+      var elemName = 'tapered-rule';
+      var thatDoc = document;
+      var thisDoc = (thatDoc.currentScript || thatDoc._currentScript).ownerDocument;
+      var proto = Object.create(HTMLElement.prototype, {
+        createdCallback: {
+          value: function() {
+            var template = thisDoc.getElementById(elemName);
+            var clone = thatDoc.importNode(template.content, true);
+            this.createShadowRoot().appendChild(clone);
+          }
         }
-
-      }
-    }
-  });
-  thatDoc.registerElement(elemName, {prototype: proto});
-})(window, document);
-</script><template id="property-line">
-  <style>
-    :host {
-      line-height: 1.4;
-      display: block;
-      text-indent: -1em;
-      padding-left: 1em;
-    }
-
-    ::content > h4 {
-      margin: 0;
-      display: inline;
-      font-weight: bold;
-    }
-
-    ::content > p:first-of-type {
-      display: inline;
-      text-indent: 0;
-    }
-
-    ::content > p {
-      text-indent: 1em;
-      margin: 0;
-    }
-  </style>
-  <content></content>
-</template><script>
-(function(window, document) {
-  var elemName = 'property-line';
-  var thatDoc = document;
-  var thisDoc = (thatDoc.currentScript || thatDoc._currentScript).ownerDocument;
-  var proto = Object.create(HTMLElement.prototype, {
-    createdCallback: {
-      value: function() {
-        var template = thisDoc.getElementById(elemName);
-        var clone = thatDoc.importNode(template.content, true);
-        this.createShadowRoot().appendChild(clone);
-      }
-    }
-  });
-  thatDoc.registerElement(elemName, {prototype: proto});
-})(window, document);
-</script><template id="property-block">
-  <style>
-    :host {
-      margin-top: 0.3em;
-      margin-bottom: 0.9em;
-      line-height: 1.5;
-      display: block;
-    }
-
-
-    ::content > h4 {
-      margin: 0;
-      display: inline;
-      font-weight: bold;
-      font-style: italic;
-    }
-
-    ::content > p:first-of-type {
-      display: inline;
-      text-indent: 0;
-    }
-
-    ::content > p {
-      text-indent: 1em;
-      margin: 0;
-    }
-  </style>
-  <content></content>
-</template><script>
-(function(window, document) {
-  var elemName = 'property-block';
-  var thatDoc = document;
-  var thisDoc = (thatDoc.currentScript || thatDoc._currentScript).ownerDocument;
-  var proto = Object.create(HTMLElement.prototype, {
-    createdCallback: {
-      value: function() {
-        var template = thisDoc.getElementById(elemName);
-        var clone = thatDoc.importNode(template.content, true);
-        this.createShadowRoot().appendChild(clone);
-      }
-    }
-  });
-  thatDoc.registerElement(elemName, {prototype: proto});
-})(window, document);
-</script><template id="stat-block">
-  <style>
-    .bar {
-      height: 5px;
-      background: #E69A28;
-      border: 1px solid #000;
-      position: relative;
-      z-index: 1;
-    }
-
-    :host {
-      display: inline-block;
-    }
-
-    #content-wrap {
-      font-family: 'Noto Sans', 'Myriad Pro', Calibri, Helvetica, Arial,
-                    sans-serif;
-      font-size: 10px;
-      background: #FDF1DC;
-      padding: 0.6em;
-      padding-bottom: 0.5em;
-      border: 1px #DDD solid;
-      box-shadow: 0 0 1.5em #867453;
-
-      /* We don't want the box-shadow in front of the bar divs. */
-      position: relative;
-      z-index: 0;
-
-      /* Leaving room for the two bars to protrude outwards */
-      margin-left: 2px;
-      margin-right: 2px;
-
-      /* This is possibly overriden by next CSS rule. */
-      width:300px;
-      height: auto;
-
-      -webkit-columns: 300px;
-         -moz-columns: 300px;
-              columns: 300px;
-      -webkit-column-gap: 30px;
-         -moz-column-gap: 30px;
-              column-gap: 30px;
-colum
-      /* When height is constrained, we want sequential filling of columns. */
-      -webkit-column-fill: auto;
-         -moz-column-fill: auto;
-              column-fill: auto;
-    }
-
-    @media print{
-
-      #content-wrap {
-        /*background: none;
-        box-shadow: none;*/
-        /*font-size: 10px;*/
-        /*width:auto;*/
-        height:auto
-      }
-
-    }
-
-
-
-    ::content > h3 {
-      border-bottom: 1px solid #7A200D;
-      color: #7A200D;
-      font-size: 21px;
-      font-variant: small-caps;
-      font-weight: normal;
-      letter-spacing: 1px;
-      margin: 0;
-      margin-bottom: 0.3em;
-
-      break-inside: avoid-column;
-      break-after: avoid-column;
-    }
-
-    /* For user-level p elems. */
-    ::content > p {
-      margin-top: 0.3em;
-      margin-bottom: 0.9em;
-      line-height: 1.5;
-    }
-
-    /* Last child shouldn't have bottom margin, too much white space. */
-    ::content > *:last-child {
-      margin-bottom: 0;
-    }
-  </style>
-  <div class="bar"></div>
-  <div id="content-wrap">
-    <content></content>
-  </div>
-  <div class="bar"></div>
-</template><script>
-(function(window, document) {
-  var elemName = 'stat-block';
-  var thatDoc = document;
-  var thisDoc = (thatDoc.currentScript || thatDoc._currentScript).ownerDocument;
-  var proto = Object.create(HTMLElement.prototype, {
-    createdCallback: {
-      value: function() {
-        var template = thisDoc.getElementById(elemName);
-        // If the attr() CSS3 function were properly implemented, we wouldn't
-        // need this hack...
-        if (this.hasAttribute('data-content-width')) {
-          var wrap = template.content.getElementById('content-wrap');
-          wrap.style.width = this.getAttribute('data-content-width');
-        }
-        var clone = thatDoc.importNode(template.content, true);
-        this.createShadowRoot().appendChild(clone);
-      }
-    }
-  });
-  thatDoc.registerElement(elemName, {prototype: proto});
-})(window, document);
-</script>
-
-
-  <script>
-    /*
-    function del(event){
-      if(event.target.parentNode.nodeName != "STAT-BLOCK" && event.target.parentNode.nodeName != "BODY" ){
-        event.target.parentNode.remove();
-      }else{
-        if(event.target.nodeName != "STAT-BLOCK")event.target.remove();
-      }
-      console.log(event.target.parentNode.nodeName,event.target.nodeName);
-
-    }
-    document.addEventListener("click",del)
-    */
-
-    if(!localStorage.getItem("monsters")){
-      localStorage.setItem("monsters",JSON.stringify(monsters));
-    }else{
-      monsters = JSON.parse(localStorage.getItem("monsters"));
-    }
-
-    function updateStorage(){
-      localStorage.setItem("monsters",JSON.stringify(monsters));
-    }
-
-    let monsterInput = document.createElement("input");
-    let abilitieNames = ["str","dex","con","int","wis","cha"];
-    let skillsNames = ["acrobatics","arcana","athletics","deception","history",
-    "insight","intimidation","investigation","medicine","nature",
-    "perception","performance","persuasion","religion","stealth","survival"]
-    monsterInput.style.width = "400px";
-    monsterInput.style.display = "block";
-
-    let dataList = document.createElement("datalist");
-    dataList.id = "monsters";
-
-    function dataListUpdate(){
-
-      while (dataList.firstElementChild) {
-        dataList.removeChild(dataList.firstElementChild);
-      }
-      monsters.forEach(function(c){
-        let option = document.createElement("option");
-        option.value = c.name;
-        dataList.appendChild(option);
-      })
-    }dataListUpdate();
-
-    document.body.appendChild(dataList);
-    let a = document.createAttribute("list");
-    a.value = dataList.id;
-    monsterInput.setAttributeNode(a);
-    document.body.insertBefore(monsterInput,document.body.firstElementChild);
-    monsterInput.onkeypress = function(e){
-
-    	if(e.code === "Enter"){
-        let str = monsterInput.value.replace(/\b[a-z]/g,function(str){return str.toUpperCase()})
-        createStatBlock(str);
-        monsterInput.value = "";
-    	}
-    }
-
-
-    let query = window.location.search.substring(1);
-    let urlMonsters = [];
-    if(query!=="")urlMonsters = query.split(",");
-    urlMonsters.forEach(function(c){
-      let str = c.replace(/%20/g," ");
-      createStatBlock(str);
-    })
-
-    let parent = null;
-    let renaming = 0;
-    let mode = "";
-    let CurrentTarget = null;
-
-
-
-
-
-    function statBlockToJSON(statBlock){
-      let data = {};
-      let children = statBlock.children;
-      let abilitieFullNames = ["strength","dexterity","constitution","intelligence","wisdom","charisma"]
-
-      let findStrBetween = function (subStr1,subStr2,str){
-
-
-        let findStr = function(subStr){
-          let array = [];
-          let index = 0;
-          let nextIndex = 0;
-          do{
-            index = str.indexOf(subStr,nextIndex);
-            if(index === -1)break;
-            nextIndex = index+subStr.length;
-            array.push(index);
-          }while(true)
-          return array;
-        }
-
-        let opening = findStr(subStr1);
-        let closing = findStr(subStr2);
-        let between = [];
-
-        for(let i = 0; i< opening.length;i++){
-          between.push(str.substring(opening[i]+subStr1.length,closing[i]))
-        }
-
-        return between;
-      }
-
-      let heading = children[0].innerText.split("\n");
-      data.name = heading[0];
-      let wordMatch = heading[1].match(/\w+/g);
-      data.size = wordMatch[0];
-      data.type = wordMatch[1];
-      data.subtype = heading[1].includes("(")?heading[1].match(/\((.*)\)/)[0].replace(/(\(|\))/g,""):"";
-      data.alignment = heading[1].match(/,.*/)[0].match(/\w+/g).join(" ");
-
-
-      let topStatsHTML = children[1].innerHTML;
-      let propertyLineNames = findStrBetween("<h4>","</h4>",topStatsHTML).map(c=>c.trim().toLowerCase().replace(/ /g,"_"));
-      let propertyLineValues = findStrBetween("<p>","</p>",topStatsHTML);
-
-      propertyLineNames.forEach(function(c,i){
-
-        switch(c){
-          case "challenge":
-            data.challenge_rating = propertyLineValues[i].split(" ")[0];
-          break;
-          case "saving_throws":
-            propertyLineValues[i].split(",").map(str=>str.trim().split(" ")).forEach(function(save){
-              let name = abilitieFullNames[abilitieNames.indexOf(save[0].toLowerCase())];
-              let value = parseInt(save[1]);
-
-              data[name+"_save"] = value;
-            })
-          break;
-            case "skills":
-            propertyLineValues[i].split(",").map(str=>str.trim().split(" ")).forEach(function(skill){
-              data[skill[0].toLowerCase()] = parseInt(skill[1]);
-            })
-          break;
-          case "armor_class":
-            data[c] = parseInt(propertyLineValues[i]);
-          break;
-          case "hit_points":
-            data.hit_dice = propertyLineValues[i].match(/\d+d\d+/)[0];
-            data[c] = parseInt(propertyLineValues[i].match(/\d+/)[0]);
-          break
-          default:
-            data[c] = propertyLineValues[i];
-        }
-
-      })
-
-      rawAbilities = children[1].children[3].attributes;
-      for(let i =0;i<rawAbilities.length;i++){
-        data[abilitieFullNames[i]] = parseInt(rawAbilities.item(i).nodeValue);
-      }
-
-
-
-      let properties = [];
-
-      let currentPropertyType = "special_abilities";
-      for(let i = 2; i<children.length;i++){
-        let cChild = children[i];
-        if(cChild.localName === "h3"){
-          currentPropertyType = cChild.innerHTML.toLowerCase().replace(/ /,"_");
-        }
-        if(cChild.localName === "property-block"){
-          let propertyHTML = cChild.innerHTML;
-          let name = findStrBetween("<h4>","</h4>",propertyHTML)[0].trim();
-          let desc = findStrBetween("<p>","</p>",propertyHTML)[0].trim();
-          properties.push({propertyType:currentPropertyType,name:name,desc:desc});
-        }
-      }
-
-      properties.forEach(function(c){
-        if(!data[c.propertyType]){
-          data[c.propertyType] = [];
-        }
-        data[c.propertyType].push({name:c.name,desc:c.desc});
-      })
-
-      let monsterIndex = monsters.findIndex(c=>c.name === data.name);
-      if(monsterIndex === -1){
-        monsters.push(data);
-        dataListUpdate();
-        alert(data.name+" created and saved");
-      }else{
-        monsters[monsterIndex] = data;
-        alert(data.name+" updated");
-      }
-
-      updateStorage();
-
-      var textFile = null;
-      (function(obj){
-
-        let text = "monsters = "+ JSON.stringify(obj);
-        let data = new Blob([text], {type: 'text/plain'});
-
-        // If we are replacing a previously generated file we need to
-        // manually revoke the object URL to avoid memory leaks.
-        if (textFile !== null) {
-          window.URL.revokeObjectURL(textFile);
-        }
-
-        textFile = window.URL.createObjectURL(data);
-
-        // returns a URL you can use as a href
-        let a = document.querySelector("body p a");
-
-        a.href = textFile;
-        a.download = "monsters.js";
-
-      })(monsters);
-
-    }
-
-
-
-
-    function createStatBlock(name){
-
-      let variableToTitle = function(text){
-        return text.replace(/_/," ").replace(/\b[a-z]/g,function(str){return str.toUpperCase()})
-      }
-
-      name = variableToTitle(name);
-
-      filteredMonsters = monsters.filter(c=>c.name.length === name.length);
-
-      let monster = filteredMonsters.find(function(c){
-        return c.name === name;
       });
-
-
-      if(!monster){
-
-        let search = confirm("Creature not in monsterdex. search aidedd?");
-        if(search){
-          let searchName = name.toLowerCase().replace(/ /g,"-");
-          window.open("http://www.aidedd.org/dnd/monstres.php?vo="+searchName);
+      thatDoc.registerElement(elemName, {prototype: proto});
+    })(window, document);
+    </script><template id="top-stats">
+      <style>
+        ::content * {
+          color: #7A200D;
         }
-        return;
-      }
+      </style>
 
-      //create text node
-      let ct = function(text){
-        return document.createTextNode(text);
-      }
-
-      //create Element
-      let ce = function(name,text){
-        let e = document.createElement(name);
-        let c = ct(text);
-        e.appendChild(c);
-        return e;
-      }
-
-      //create property-line or property-block
-      let cProperty = function(type,title,content){
-        let block = ce(type,"");
-        let h4 = ce("h4",title+" ");
-        let p = ce("p",content);
-        block.appendChild(h4);
-        block.appendChild(p);
-        return block;
-      }
-
-      let cInfo = function(){
-        let size= monster.size+" ",
-            type= monster.type,
-            subtype= monster.subtype===""?"":(" ("+monster.subtype+")");
-            alignment=", "+monster.alignment;
-
-        let str = size+type+subtype+alignment;
-        return ce("h2",str);
-      }
-
-      let cAbilities = function(){
-        let aStats =
-        [monster.strength,
-        monster.dexterity,
-        monster.constitution,
-        monster.intelligence,
-        monster.wisdom,
-        monster.charisma]
-
-        let aBlock = ce("abilities-block","");
-        for(let i = 0;i<6;i++){
-          let a = document.createAttribute("data-"+abilitieNames[i]);
-          a.value = aStats[i];
-          aBlock.setAttributeNode(a);
-        }
-
-        return aBlock;
-      }
-
-      let cHP = function(){
-        let averages = {
-          "Tiny":2.5,
-          "Small":3.5,
-          "Medium":4.5,
-          "Large":5.5,
-          "Huge":6.5,
-          "Gargantuan":10.5
-        }
-
-        let intHitDice = monster.hit_dice.match(/\d+/g);
-        let hitDiceAverage = intHitDice[0]*averages[monster.size];
-        let plus = Math.round(monster.hit_points-hitDiceAverage);
-
-        return cProperty("property-line","Hit Points",monster.hit_points+" ("+monster.hit_dice+" + "+plus+")")
-      }
-
-
-
-      let cOccationnalProperty = function(property){
-        if(monster[property]!=="" && monster[property]){
-
-          return cProperty("property-line",variableToTitle(property),monster[property]);
-        }else{
-          return null;
-        }
-      }
-
-      let cChallenge = function(){
-        let crToXp={
-          "0":10,
-          "1/8":25,
-          "1/4":50,
-          "1/2":100,
-          "1":200,
-          "2":450,
-          "3":700,
-          "4":1100,
-          "5":1800,
-          "6":2300,
-          "7":2900,
-          "8":3900,
-          "9":5000,
-          "10":5900,
-          "11":7200,
-          "12":8400,
-          "13":10000,
-          "14":11500,
-          "15":13000,
-          "16":15000,
-          "17":18000,
-          "18":20000,
-          "19":22000,
-          "20":25000,
-          "21":33000,
-          "22":41000,
-          "23":50000,
-          "24":62000,
-          "25":75000,
-          "26":90000,
-          "27":105000,
-          "28":120000,
-          "29":135000,
-          "30":155000
-        }
-        return cProperty("property-line","Challenge",monster.challenge_rating+" ("+crToXp[monster.challenge_rating]+" XP)")
-      }
-
-      let propertyBlocks= function(array){
-        let blocks = [];
-        if(array){
-          array.forEach(function(c){
-            blocks.push(cProperty("property-block",c.name,c.desc))
-          })
-          return blocks;
-        }
-        return null
-      }
-
-      let cSaves = function(){
-        let saves = [];
-
-        if(!isNaN(monster.strength_save)){
-          saves.push( " Str +"+monster.strength_save);
-        }
-        if(!isNaN(monster.dexterity_save)){
-          saves.push( " Dex +"+monster.dexterity_save);
-        }
-        if(!isNaN(monster.constitution_save)){
-          saves.push(" Con +"+monster.constitution_save);
-        }
-        if(!isNaN(monster.intelligence_save)){
-          saves.push(" Int +"+monster.intelligence_save);
-        }
-        if(!isNaN(monster.wisdom_save)){
-          saves.push( " Wis +"+monster.wisdom_save);
-        }
-        if(!isNaN(monster.charisma_save)){
-          saves.push( " Cha +"+monster.charisma_save);
-        }
-
-        if(!saves.length)return null;
-        return cProperty("property-line","Saving Throws",saves.join(", "));
-      }
-
-      let cSkills = function(){
-
-
-        let strArray = [];
-
-        skillsNames.forEach(function(c){
-          if(!isNaN(monster[c])){
-            strArray.push(variableToTitle(c)+" +"+monster[c]);
-          }
-        })
-        if(!strArray.length)return null;
-        return cProperty("property-line","Skills",strArray.join(", "));
-
-      }
-
-      let statBlock = ce("stat-block","");
-
-      //create blocks
-      let creatureHeading = ce("creature-heading","")
-      let creatureName = ce ("h1",monster.name);
-      let creatureInfo = cInfo();
-      creatureHeading.appendChild(creatureName);
-      creatureHeading.appendChild(creatureInfo);
-
-      let topStats = ce("top-stats","");
-      let ac = cProperty("property-line","Armor Class",monster.armor_class);
-      let hp = cHP();
-      let speed = cProperty("property-line","Speed",monster.speed);
-      let abilitiesBlock = cAbilities();
-      let saves = cSaves();
-      let skills = cSkills();
-      let dmgVulnerabilities = cOccationnalProperty("damage_vulnerabilities");
-      let dmgResistances = cOccationnalProperty("damage_resistances");
-      let dmgImmunities = cOccationnalProperty("damage_immunities");
-      let conditionImmunities = cOccationnalProperty("condition_immunities");
-      let senses = cProperty("property-line","Senses",monster.senses);
-      let languages = cProperty("property-line","Languages",monster.languages===""?"-":monster.languages);
-      let challenge = cChallenge();
-      topStats.appendChild(ac);
-      topStats.appendChild(hp);
-      topStats.appendChild(speed);
-      topStats.appendChild(abilitiesBlock);
-
-      if(saves)topStats.appendChild(saves);
-      if(skills)topStats.appendChild(skills);
-      if(dmgVulnerabilities)topStats.appendChild(dmgVulnerabilities);
-      if(dmgResistances)topStats.appendChild(dmgResistances);
-      if(dmgImmunities)topStats.appendChild(dmgImmunities);
-      if(conditionImmunities)topStats.appendChild(conditionImmunities);
-
-      topStats.appendChild(senses);
-      topStats.appendChild(languages);
-      topStats.appendChild(challenge);
-
-
-      let specialAbilities = propertyBlocks(monster.special_abilities);
-
-      let actionSection = ce("h3","Actions");
-      let actions = propertyBlocks(monster.actions);
-
-      let reactionSection = ce("h3","Reactions");
-      let reactions = propertyBlocks(monster.reactions);
-
-      let legendaryActionSection = ce("h3","Legendary Actions");
-      let legendaryRule =ce("p","The "+monster.name+
-      " can take 3 legendary actions, choosing from the options below. Only one legendary action option can be used at a time and only at the end of another creature's turn. The "+ monster.name+" regains spent legendary actions at the start of its turn.")
-      let legendaryActions =  propertyBlocks(monster.legendary_actions);
-
-      //place blocks
-
-      statBlock.appendChild(creatureHeading);
-      statBlock.appendChild(topStats);
-
-      if(specialAbilities)specialAbilities.forEach(function(c){statBlock.appendChild(c)})
-
-      if(actions){
-        statBlock.appendChild(actionSection);
-        actions.forEach(function(c){statBlock.appendChild(c)})
-      }
-      if(reactions){
-        statBlock.appendChild(reactionSection);
-        reactions.forEach(function(c){statBlock.appendChild(c)})
-      }
-      if(legendaryActions){
-        statBlock.appendChild(legendaryActionSection);
-        statBlock.appendChild(legendaryRule);
-        legendaryActions.forEach(function(c){statBlock.appendChild(c)})
-      }
-
-      document.body.insertBefore(statBlock,document.querySelector("body input").nextElementSibling);
-
-    }
-
-
-
-    function resetSelected(target){
-      if(target)target.id = "";
-      parent = null;
-      CurrentTarget = null;
-    }
-
-    function resetSet (target,p){
-
-      if(target!== CurrentTarget){
-        resetSelected(CurrentTarget);
-        parent = p;
-        target.id = "selected";
-        CurrentTarget = target;
-      }else{
-        resetSelected(target);
-      }
-    }
-
-    function select(){
-      if(mode!="")return;
-
-      let parentName = event.target.parentNode.localName;
-      let targetName = event.target.localName;
-
-      if(targetName==="h4" || targetName==="p" || targetName==="h3" ){
-        if(parentName === "top-stats"|| parentName==="property-block" || parentName==="property-line"){
-          resetSet(event.target.parentNode,event.target.parentNode.parentNode);
-        }else if(parentName === "stat-block") {
-          resetSet(event.target,event.target.parentNode);
-        }
-      }else {
-
-
-          if(parentName === "creature-heading"){
-            resetSelected(CurrentTarget);
-            modProperty(event.target);
-          }else if( targetName === "abilities-block"){
-            resetSelected(CurrentTarget);
-            abilityMod(event.target);
-          }else if(parentName == "body" && targetName=="stat-block"){
-            resetSet(event.target,event.target.parentNode)
-            moveStat(event.target,parent);
-          }
-
-      }
-      console.log(parentName);
-      console.log(targetName);
-
-    }
-
-    function moveStat(target){
-      let pressedKey = {};
-      mode = "moveStat";
-
-      let done = function(){
-        resetSelected(CurrentTarget);
-        mode = "";
-        document.removeEventListener("keydown",keyDown);
-        document.removeEventListener("keyup",keyUp);
-        document.removeEventListener("click",done);
-      }
-
-      let keyDown = function(event){
-        if(event.code === "ArrowLeft"){
-          changeDim(target,"width",-330)
-          event.preventDefault();
-        }
-
-        if(event.code === "ArrowRight"){
-          changeDim(target,"width",330)
-          event.preventDefault();
-        }
-
-        if(event.code === "Enter"){
-          done();
-        }
-
-        if(event.code === "KeyS"){
-          statBlockToJSON(target);
-        }
-
-        if(event.code === "KeyD"){
-          let name = target.children[0].children[0].innerHTML;
-
-          let index = monsters.findIndex(c=>c.name===name);
-
-          if(index!=-1){
-            monsters.splice(index,1);
-            dataListUpdate();
-            updateStorage();
-            alert(name+" deleted");
-          }else{
-            alert(name+" is not saved");
+      <tapered-rule></tapered-rule>
+      <content></content>
+      <tapered-rule></tapered-rule>
+    </template><script>
+    (function(window, document) {
+      var elemName = 'top-stats';
+      var thatDoc = document;
+      var thisDoc = (thatDoc.currentScript || thatDoc._currentScript).ownerDocument;
+      var proto = Object.create(HTMLElement.prototype, {
+        createdCallback: {
+          value: function() {
+            var template = thisDoc.getElementById(elemName);
+            var clone = thatDoc.importNode(template.content, true);
+            this.createShadowRoot().appendChild(clone);
           }
         }
-
-      }
-
-      let statBlockRect = target.getBoundingClientRect();
-
-      let keyUp = function(event){
-        pressedKey[event.code]=false;
-      }
-
-
-
-      document.addEventListener("keydown",keyDown);
-      document.addEventListener("keyup",keyUp);
-      document.addEventListener("click",done);
-    }
-
-    function changeDim(block,woh,value){
-      let intV = parseInt(block.shadowRoot.styleSheets[0].rules[2].style[woh]);
-      block.shadowRoot.styleSheets[0].rules[2].style[woh] = (intV+value)+"px";
-    }
-
-    function abilityMod(target){
-      modProperty(target,"abilities");
-    }
-
-    function variableToTitle(text){
-      return text.replace(/_/," ").replace(/\b[a-z]/g,function(str){return str.toUpperCase()})
-    }
-
-
-    function modProperty(target,type){
-      if(!target)return;
-      let textBox = document.createElement("textarea");
-      textBox.style.zIndex = 1;
-      let targetInfo = target.getBoundingClientRect();
-      textBox.style.position = "absolute";
-      textBox.style.width = targetInfo.width+100+"px";
-      let offset = $(target).offset();
-
-
-      mode = "writting";
-      textBox.style.top = offset.top+"px";
-      textBox.style.left = offset.left+"px";
-      textBox.style.height = targetInfo.height+"px";
-
-      if(type === "abilities"){
-
-        let abilities = {};
-
-        for(let i =0; i<6;i++){
-          textBox.value += abilitieNames[i]+" = "+target.attributes.item(i).nodeValue+" | ";
+      });
+      thatDoc.registerElement(elemName, {prototype: proto});
+    })(window, document);
+    </script>
+    <template id="creature-heading">
+      <style>
+        ::content > h1 {
+          font-family: 'Libre Baskerville', 'Lora', 'Calisto MT',
+                       'Bookman Old Style', Bookman, 'Goudy Old Style',
+                       Garamond, 'Hoefler Text', 'Bitstream Charter',
+                       Georgia, serif;
+          color: #7A200D;
+          font-weight: 700;
+          margin: 0px;
+          font-size: 23px;
+          letter-spacing: 1px;
+          font-variant: small-caps;
         }
 
-      }else{
-        textBox.value = target.innerHTML;
+        ::content > h2 {
+          font-weight: normal;
+          font-style: italic;
+          font-size: 10px;
+          margin: 0;
+        }
+
+
+      </style>
+      <content select="input"></content>
+      <content select="h1"></content>
+      <content select="h2"></content>
+
+    </template><script>
+    (function(window, document) {
+      var elemName = 'creature-heading';
+      var thatDoc = document;
+      var thisDoc = (thatDoc.currentScript || thatDoc._currentScript).ownerDocument;
+      var proto = Object.create(HTMLElement.prototype, {
+        createdCallback: {
+          value: function() {
+            var template = thisDoc.getElementById(elemName);
+            var clone = thatDoc.importNode(template.content, true);
+            this.createShadowRoot().appendChild(clone);
+          }
+        }
+      });
+      thatDoc.registerElement(elemName, {prototype: proto});
+    })(window, document);
+    </script><template id="abilities-block">
+      <style>
+        table {
+          width: 100%;
+          border: 0px;
+          border-collapse: collapse;
+        }
+        th, td {
+          width: 50px;
+          text-align: center;
+        }
+      </style>
+      <tapered-rule></tapered-rule>
+      <table>
+        <tbody><tr>
+          <th>STR</th>
+          <th>DEX</th>
+          <th>CON</th>
+          <th>INT</th>
+          <th>WIS</th>
+          <th>CHA</th>
+        </tr>
+        <tr>
+          <td id="str"></td>
+          <td id="dex"></td>
+          <td id="con"></td>
+          <td id="int"></td>
+          <td id="wis"></td>
+          <td id="cha"></td>
+        </tr>
+      </tbody></table>
+      <tapered-rule></tapered-rule>
+    </template><script>
+    (function(window, document) {
+      function abilityModifier(abilityScore) {
+        var score = parseInt(abilityScore, 10);
+        return Math.floor((score - 10) / 2);
       }
 
-      document.body.appendChild(textBox);
-      let done = function(){
-        if(event.code === "Enter" || (event.type === "click" && event.target!==textBox) ){
-          if(type === "abilities"){
-            let tParent = target.parentNode;
-            let sibling = target.previousElementSibling;
-            target.remove();
-            let aBlock = document.createElement("abilities-block");
-            let data = textBox.value.match(/\d+/g);
+      function formattedModifier(abilityModifier) {
+        if (abilityModifier >= 0) {
+          return '+' + abilityModifier;
+        }
+        // This is an en dash, NOT a "normal" dash. The minus sign needs to be more
+        // visible.
+        return '–' + Math.abs(abilityModifier);
+      }
 
-            for(let i = 0;i<6;i++){
-              let a = document.createAttribute("data-"+abilitieNames[i]);
-              a.value = data[i];
-              aBlock.setAttributeNode(a);
+      function abilityText(abilityScore) {
+        return [String(abilityScore),
+                ' (',
+                formattedModifier(abilityModifier(abilityScore)),
+                ')'].join('');
+      }
+
+      var elemName = 'abilities-block';
+      var thatDoc = document;
+      var thisDoc = (thatDoc.currentScript || thatDoc._currentScript).ownerDocument;
+      var proto = Object.create(HTMLElement.prototype, {
+        createdCallback: {
+          value: function() {
+            var template = thisDoc.getElementById(elemName);
+            var clone = thatDoc.importNode(template.content, true);
+            var root = this.createShadowRoot().appendChild(clone);
+          }
+        },
+        attachedCallback: {
+          value: function() {
+            var root = this.shadowRoot;
+            for (var i = 0; i < 6; i++) {
+              var attribute = this.attributes[i];
+              var abilityShortName = attribute.name.split('-')[1];
+              root.getElementById(abilityShortName).textContent =
+                 abilityText(attribute.value);
             }
 
-            tParent.insertBefore(aBlock, sibling.nextSibling);
-
-          }else{
-            let value = textBox.value;
-            if(target.localName==="h1"){
-              value = variableToTitle(value);
-            }
-            target.innerHTML = value;
           }
-          textBox.remove();
-          mode="";
-          document.removeEventListener("keydown",done);
-          document.removeEventListener("click",done);
         }
-      }
-      document.addEventListener("keydown",done);
-      document.addEventListener("click",done);
-    }
+      });
+      thatDoc.registerElement(elemName, {prototype: proto});
+    })(window, document);
+    </script><template id="property-line">
+      <style>
+        :host {
+          line-height: 1.4;
+          display: block;
+          text-indent: -1em;
+          padding-left: 1em;
+        }
 
-    function mod(target,type){
-      resetSelected(CurrentTarget);
-      let input = document.createElement("input");
-      let done = function(){
-        if(event.code === "Enter" || (event.type === "click" && event.target!==input) ){
-          if(type === "abilities"){
-            let tParent = target.parentNode;
-            let sibling = target.previousElementSibling;
-            target.remove();
-            let aBlock = document.createElement("abilities-block");
-            let data = input.value.match(/\d+/g);
+        ::content > h4 {
+          margin: 0;
+          display: inline;
+          font-weight: bold;
+        }
 
-            for(let i = 0;i<6;i++){
-              let a = document.createAttribute("data-"+abilitieNames[i]);
-              a.value = data[i];
-              aBlock.setAttributeNode(a);
-            }
+        ::content > p:first-of-type {
+          display: inline;
+          text-indent: 0;
+        }
 
-            tParent.insertBefore(aBlock, sibling.nextSibling);
+        ::content > p {
+          text-indent: 1em;
+          margin: 0;
+        }
+      </style>
+      <content></content>
+    </template><script>
+    (function(window, document) {
+      var elemName = 'property-line';
+      var thatDoc = document;
+      var thisDoc = (thatDoc.currentScript || thatDoc._currentScript).ownerDocument;
+      var proto = Object.create(HTMLElement.prototype, {
+        createdCallback: {
+          value: function() {
+            var template = thisDoc.getElementById(elemName);
+            var clone = thatDoc.importNode(template.content, true);
+            this.createShadowRoot().appendChild(clone);
+          }
+        }
+      });
+      thatDoc.registerElement(elemName, {prototype: proto});
+    })(window, document);
+    </script><template id="property-block">
+      <style>
+        :host {
+          margin-top: 0.3em;
+          margin-bottom: 0.9em;
+          line-height: 1.5;
+          display: block;
+        }
 
-          }else{
-            target.innerHTML=input.value;
+
+        ::content > h4 {
+          margin: 0;
+          display: inline;
+          font-weight: bold;
+          font-style: italic;
+        }
+
+        ::content > p:first-of-type {
+          display: inline;
+          text-indent: 0;
+        }
+
+        ::content > p {
+          text-indent: 1em;
+          margin: 0;
+        }
+      </style>
+      <content></content>
+    </template><script>
+    (function(window, document) {
+      var elemName = 'property-block';
+      var thatDoc = document;
+      var thisDoc = (thatDoc.currentScript || thatDoc._currentScript).ownerDocument;
+      var proto = Object.create(HTMLElement.prototype, {
+        createdCallback: {
+          value: function() {
+            var template = thisDoc.getElementById(elemName);
+            var clone = thatDoc.importNode(template.content, true);
+            this.createShadowRoot().appendChild(clone);
+          }
+        }
+      });
+      thatDoc.registerElement(elemName, {prototype: proto});
+    })(window, document);
+    </script><template id="stat-block">
+      <style>
+        .bar {
+          height: 5px;
+          background: #922610;
+          border: 1px solid #000;
+          position: relative;
+          z-index: 1;
+        }
+
+        :host {
+          display: inline-block;
+        }
+
+        #content-wrap {
+          font-family: 'Noto Sans', 'Myriad Pro', Calibri, Helvetica, Arial,
+                        sans-serif;
+          font-size: 10px;
+          background: #FDF1DC;
+          padding: 0.6em;
+          padding-bottom: 0.5em;
+          border: 1px #000000 solid;
+          box-shadow: 2px 0 5px -0 rgba(0, 0, 0, 0.7), -2px 0 5px 0 rgba(0, 0, 0, 0.7);
+
+          /* We don't want the box-shadow in front of the bar divs. */
+          position: relative;
+          z-index: 2;
+
+          /* Leaving room for the two bars to protrude outwards */
+          margin-left: 2px;
+          margin-right: 2px;
+
+          /* This is possibly overriden by next CSS rule. */
+          width:300px;
+          height: auto;
+
+          -webkit-columns: 300px;
+             -moz-columns: 300px;
+                  columns: 300px;
+          -webkit-column-gap: 30px;
+             -moz-column-gap: 30px;
+                  column-gap: 30px;
+    colum
+          /* When height is constrained, we want sequential filling of columns. */
+          -webkit-column-fill: auto;
+             -moz-column-fill: auto;
+                  column-fill: auto;
+        }
+
+        @media print{
+
+          #content-wrap {
+            /*background: none;
+            box-shadow: none;*/
+            /*font-size: 10px;*/
+            height:auto
           }
 
-          input.remove();
-          mode = "";
-          document.removeEventListener("keydown",done);
-          document.removeEventListener("click",done);
-        }
-      }
-      let targetInfo = target.getBoundingClientRect();
-      mode = "renaming";
-      input.type = "text";
-
-      if(type === "abilities"){
-
-        let abilities = {};
-
-        for(let i =0; i<6;i++){
-          input.value += abilitieNames[i]+" = "+target.attributes.item(i).nodeValue+" | ";
         }
 
 
 
-      }else{
-        input.value = target.innerHTML;
-      }
+        ::content > h3 {
+          border-bottom: 1px solid #7A200D;
+          color: #7A200D;
+          font-size: 21px;
+          font-variant: small-caps;
+          font-weight: normal;
+          letter-spacing: 1px;
+          margin: 0;
+          margin-bottom: 0.3em;
 
-      input.style.position = "absolute";
-      input.style.width = targetInfo.width+"px";
-      input.style.top = targetInfo.top+"px";
-      input.style.left = targetInfo.left+"px";
-      input.style.height = targetInfo.height+"px";
-      document.body.appendChild(input);
-      document.addEventListener("keydown",done);
-      document.addEventListener("click",done);
-    }
-
-
-
-
-    function removeChildsPlaceInArray(parent){
-      let list = [];
-      let width = [];
-      while (parent.firstElementChild) {
-        list.push(parent.firstElementChild);
-        if(parent.firstElementChild.shadowRoot && parent.localName === "body"){
-          width.push(parent.firstElementChild.shadowRoot.styleSheets[0].rules[2].style.width)
-        }else{
-          width.push("");
-        };
-        parent.removeChild(parent.firstElementChild);
-      }
-      return {list:list,width:width};
-    }
-    function placeArray(parent,array){
-      array.list.forEach(function(c,i){
-
-        parent.appendChild(c);
-        if(array.width[i]!=="")c.shadowRoot.styleSheets[0].rules[2].style.width = array.width[i];
-
-      })
-    }
-
-    function findSelected(array){
-      for(let i=0;i<array.length;i++){
-        if(array[i].id === "selected"){
-          return i;
-        }
-      }
-    }
-
-    function moveElement(dir,event){
-      if(parent ){
-        let nodes = removeChildsPlaceInArray(parent);
-        let index = findSelected(nodes.list);
-        let selected = nodes.list[index];
-        let newIndex;
-        if(dir == "up"){
-          newIndex = index-1<0?index:index-1;
-
-        }else{
-          newIndex = index+1>nodes.length?index:index+1;
-        }
-        nodes.list.splice(index,1);
-        nodes.list.splice(newIndex,0,selected);
-        if(nodes.width.length){
-          selected = nodes.width[index];
-          nodes.width.splice(index,1);
-          nodes.width.splice(newIndex,0,selected);
-        }
-        placeArray(parent,nodes);
-        event.preventDefault()
-      }
-    }
-
-    function copyElement(target){
-      if(!target)return;
-      let copy = target.cloneNode(true);
-      copy.id = "";
-      target.parentNode.insertBefore(copy,target.nextElementSibling);
-      //resetSet(copy,target.parentNode);
-    }
-
-    function removeSelected(target){
-      if(!target)return;
-      resetSelected(target);
-      target.remove();
-    }
-
-    function updown(event){
-      if(mode === ""){
-
-        switch(event.code){
-          case "KeyE":
-            modProperty(CurrentTarget)
-          break;
+          break-inside: avoid-column;
+          break-after: avoid-column;
         }
 
-      }
-
-      if(mode!=="writting" && mode!=="renaming"){
-
-        switch(event.code){
-          case "ArrowUp":
-            moveElement("up",event);
-          break;
-          case "ArrowDown":
-            moveElement("down",event);
-          break;
-          case "KeyC":
-            copyElement(CurrentTarget);
-          break;
-          case "Backspace":
-            removeSelected(CurrentTarget);
-          break;
+        /* For user-level p elems. */
+        ::content > p {
+          margin-top: 0.3em;
+          margin-bottom: 0.9em;
+          line-height: 1.5;
         }
-      }
-    }
 
-    document.addEventListener("click",select);
-    document.addEventListener("keydown",updown);
-  </script>
-
+        /* Last child shouldn't have bottom margin, too much white space. */
+        ::content > *:last-child {
+          margin-bottom: 0;
+        }
+      </style>
+      <div class="bar"></div>
+      <div id="content-wrap">
+        <content></content>
+      </div>
+      <div class="bar"></div>
+    </template><script>
+    (function(window, document) {
+      var elemName = 'stat-block';
+      var thatDoc = document;
+      var thisDoc = (thatDoc.currentScript || thatDoc._currentScript).ownerDocument;
+      var proto = Object.create(HTMLElement.prototype, {
+        createdCallback: {
+          value: function() {
+            var template = thisDoc.getElementById(elemName);
+            // If the attr() CSS3 function were properly implemented, we wouldn't
+            // need this hack...
+            if (this.hasAttribute('data-content-width')) {
+              var wrap = template.content.getElementById('content-wrap');
+              wrap.style.width = this.getAttribute('data-content-width');
+            }
+            var clone = thatDoc.importNode(template.content, true);
+            this.createShadowRoot().appendChild(clone);
+          }
+        }
+      });
+      thatDoc.registerElement(elemName, {prototype: proto});
+    })(window, document);
+    </script>
 
   </body>
-
 </html>
